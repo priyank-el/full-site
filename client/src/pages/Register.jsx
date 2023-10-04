@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios"
+import { useNavigate } from 'react-router-dom'
 
 function Register() {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate()
+
+    const gotoLoginPage = () => navigate("/login")
 
     function HandleEvent() {
 
@@ -21,7 +25,6 @@ function Register() {
         <>
             <div className='grid items-center justify-center border border-blue-500 h-screen w-screen'>
                 <div className='border border-gray-300 shadow-lg grid items-center justify-center rounded-lg'>
-
                     <form onSubmit={HandleEvent} action="/home" method="get" className='mx-20 my-20'>
                         <h1 className='flex justify-center mb-14 text-2xl font-extrabold text-gray-600'>REGISTER FORM</h1>
                         <div className='h-14 w-80 border border-gray-400 grid items-center rounded-lg my-2'>
@@ -38,9 +41,12 @@ function Register() {
                         </div>
                     </form>
                     <div className='rounded-lg my-2'>
-                        <form action="/login" method='get'>
-                            <button type="submit" className='bg-blue-600 p-2 rounded-lg text-white w-28'>login first</button>
-                        </form>
+                        <button
+                            type="submit"
+                            onClick={gotoLoginPage}
+                            className='bg-blue-600 p-2 rounded-lg text-white w-28'>
+                            login first
+                        </button>
                     </div>
                 </div>
 
