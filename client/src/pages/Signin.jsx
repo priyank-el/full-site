@@ -11,13 +11,14 @@ const Signin = () => {
 
     const onFinish = (values) => {
         const { email, password } = values
+        debugger
         axios.post("http://localhost:3000/login", {
             email,
             password
         })
             .then(response => {
                 if (response.data.message !== "user login..") navigate("/")
-
+                localStorage.setItem(response.data.token)
                 navigate("/home", {
                     state: {
                         id: email
@@ -26,9 +27,9 @@ const Signin = () => {
             }
             )
             .catch((error) => {
-                if (error.response.data) navigate("/")
+                // if (error.response.data) navigate("/")
                 console.log("Unauthenticated..");
-                alert(error.response.data.error)
+                // alert(error.response.data.error)
 
                 navigate("/login")
             }
