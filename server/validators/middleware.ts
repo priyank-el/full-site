@@ -34,7 +34,6 @@ function sendError(req: Request, res: Response, data: any, statusCode = 422) {
 function formattedErrors(err: any) {
     let transformed: any = {};
     Object.keys(err).forEach(function (key) {
-        console.log(key);
         transformed[key] = err[key][0];
     })
     return transformed
