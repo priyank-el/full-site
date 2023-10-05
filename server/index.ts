@@ -2,7 +2,7 @@
 import './config/db'
 import express,{Express} from 'express'
 
-import router from './router'
+import router from './router/route'
 
 import data from './security/data'
 import cors from "cors"
