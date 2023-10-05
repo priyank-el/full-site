@@ -15,7 +15,6 @@ app.use(express.urlencoded({extended:false}))
 app.use(cors())
 app.use(router)
 
-
 app.listen(data.PORT,()=>{
     console.log(`SERVER LISTNING ON PORT:${data.PORT}...`);
 })
