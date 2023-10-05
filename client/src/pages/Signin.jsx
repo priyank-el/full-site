@@ -18,7 +18,7 @@ const Signin = () => {
         })
             .then(response => {
                 if (response.data.message !== "user login..") navigate("/")
-                localStorage.setItem(response.data.token)
+                localStorage.setItem("JwtToken",response.data.token)
                 navigate("/home", {
                     state: {
                         id: email
@@ -54,12 +54,12 @@ const Signin = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button htmlType="submit">
-                            Submit
+                            sign in
                         </Button>
                     </Form.Item>
                 </Form>
                 <div className='rounded-lg my-2'>
-                    <Link to="/" className='text-sm underline'>create account first..</Link>
+                    <Link to="/" className='text-sm underline'>create account first!</Link>
                 </div>
             </div>
         </div>

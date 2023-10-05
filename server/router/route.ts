@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { errorHandler, successHandler } from '../handler/responseHandler'
-import { loginUserValidator, registerUserValidator } from '../validators/commonValidators'
+import { loginUserValidator, registerUserValidator, updaterUserValidator } from '../validators/commonValidators'
 import secureData from '../security/data'
 import User from '../models/userSchema';
 import * as Jwt from 'jsonwebtoken'
@@ -54,6 +54,24 @@ router.get("/user-profile", async (request: Request, response: Response) => {
         successHandler(response, user, 200)
     } catch (error) {
         errorHandler(response, error, 401)
+    }
+})
+
+
+//  UPDATE USER PROFILE :
+router.put("/update-profile",updaterUserValidator, async (request: Request, response: Response) => {
+    try {
+        await User.findByIdAndUpdate(request.query.id,{
+            username: request.body.username ,
+            email:request.body.email,
+            password:request.body.password
+        })
+        const data = {
+            message:"user updated"
+        }
+        successHandler(response,data,200)
+    } catch (error) {
+        errorHandler(response,error,401)
     }
 })
 

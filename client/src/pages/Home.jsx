@@ -1,16 +1,17 @@
 
 // import SideBar from "./Sidebar";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState , } from "react";
 import { useLocation,Link } from "react-router-dom";
-
+import {UserName} from '../providers/ContextProvider'
 import React from 'react';
 import { Button, Dropdown } from 'antd';
+
 const items = [
   {
     key: '1',
     label: (
-        <Link to={"/"}>Update profile</Link>
+        <Link to={"/update-profile"}>Update profile</Link>
     ),
   },
   {
@@ -27,7 +28,7 @@ const items = [
     ),
   },
 ];
-const DropdownMenu = () => (
+const DropdownMenu = ({user}) => (
   <>
     <Dropdown
     className="hover:border hover:border-gray-200"
@@ -38,7 +39,7 @@ const DropdownMenu = () => (
       arrow
     >
       <Button className="h-full w-full hover:outline-none hover:border-gray-50 border">
-      <img class="h-full w-full rounded-2xl" src="https://plus.unsplash.com/premium_photo-1661302846246-e8faef18255d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YWRtaW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="image comes here.." />  
+        <img class="h-full w-full rounded-2xl" src="https://plus.unsplash.com/premium_photo-1661302846246-e8faef18255d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YWRtaW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="image comes here.." />  
       </Button>
     </Dropdown>
     
@@ -46,7 +47,7 @@ const DropdownMenu = () => (
 );
 
 
-function Header() {
+function Header({user}) {
 
     return (
         <div className='grid grid-cols-6 gap-2 px-2 py-1 shadow-gray-600 sticky top-0'>
@@ -71,7 +72,7 @@ function Header() {
                 </div>
                 <div className='h-14 text-center rounded-md items-center justify-center col-start-12 grid grid-cols-2'>
                     <div className='h-3/4  rounded-md flex justify-center'>
-                        <DropdownMenu />
+                        <DropdownMenu user={user}/>
                         </div>
                 </div>
             </div>
@@ -81,6 +82,8 @@ function Header() {
 }
 
 function SideBar(props) {
+    const { name , setName } = useContext(UserName)
+    console.log("nameeeeeeeeeeeeeeeeeee"+name.name)
     return (
         <div className='col-start-1 h-screen fixed rounded-md bg-slate-500'>
             <div className='grid grid-cols-1 mt-2'>
@@ -90,11 +93,11 @@ function SideBar(props) {
                             <img src="https://plus.unsplash.com/premium_photo-1661302846246-e8faef18255d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YWRtaW58ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" className='w-11 h-11 rounded-3xl' alt="Image comes here" />
                         </div>
                         <div className='col-start-2 col-span-3 text-lg font-extrabold flex items-center mt-4'>
-                            <h2 className='text-gray-400'>{props.user.username}</h2>
+                            <h2 className='text-gray-400'>{name}</h2>
                         </div>
                     </div>
                     <div className='mx-1 text-gray-400'>
-                        {props.user.email}
+                        {/* {props.user.email} */}user
                     </div>
                 </div>
                 <div className='bg-white h-10 mx-2 my-1 rounded-lg flex items-center justify-start'>
@@ -133,11 +136,12 @@ function Home() {
         username: username,
         email: loginUser.email
     }
+    console.log(userDetails)
     return (
         <>
-            <Header />
+            <Header user={userDetails}/>
             <div className="grid grid-cols-6 mx-2">
-                <SideBar user={userDetails} />
+                <SideBar />
             </div>
         </>
     )

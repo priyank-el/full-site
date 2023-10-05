@@ -42,7 +42,7 @@ const Signup = () => {
                     <Form.Item name="username" label="Username" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+                    <Form.Item  name="email" label="Email" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
                     <Form.Item name="password" label="Password" rules={[{ required: true }]}>
@@ -50,7 +50,7 @@ const Signup = () => {
                     </Form.Item>
                     <Form.Item>
                         <Button htmlType="submit">
-                            Submit
+                            Sign Up
                         </Button>
                     </Form.Item>
                 </Form>
@@ -60,8 +60,6 @@ const Signup = () => {
             </div>
 
         </div>
-
-
     );
 };
 

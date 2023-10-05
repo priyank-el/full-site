@@ -11,6 +11,15 @@ const registerUserValidator = (req: Request, res: Response, next: any) => {
     validation(registerUser, req, res, next)
 }
 
+const updaterUserValidator = (req: Request, res: Response, next: any) => {
+    const updateUser = {
+        username: 'string',
+        email: 'isUniqueemail:User,email',
+        password: 'string'
+    }
+    validation(updateUser, req, res, next)
+}
+
 const loginUserValidator = (req: Request, res: Response, next: any) => {
     const loginUser = {
         email: 'required|string',
@@ -21,5 +30,6 @@ const loginUserValidator = (req: Request, res: Response, next: any) => {
 
 export {
     registerUserValidator,
-    loginUserValidator
+    loginUserValidator,
+    updaterUserValidator
 }
