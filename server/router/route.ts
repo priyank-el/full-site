@@ -4,6 +4,7 @@ import { loginUserValidator, registerUserValidator, updaterUserValidator } from 
 import secureData from '../security/data'
 import User from '../models/userSchema';
 import * as Jwt from 'jsonwebtoken'
+import { jwtAuth } from '../middleware/jwtAuth';
 
 const router = express.Router()
 
@@ -47,7 +48,7 @@ router.post("/login", loginUserValidator, async (request: Request, response: Res
     }
 })
 
-router.get("/user-profile", async (request: Request, response: Response) => {
+router.get("/user-profile",jwtAuth,async (request: Request, response: Response) => {
     try {
         const user = await User.findOne({ email: request.query.email })
 
@@ -59,7 +60,7 @@ router.get("/user-profile", async (request: Request, response: Response) => {
 
 
 //  UPDATE USER PROFILE :
-router.put("/update-profile",updaterUserValidator, async (request: Request, response: Response) => {
+router.put("/update-profile",jwtAuth,async (request: Request, response: Response) => {
     try {
         await User.findByIdAndUpdate(request.query.id,{
             username: request.body.username ,
@@ -74,5 +75,35 @@ router.put("/update-profile",updaterUserValidator, async (request: Request, resp
         errorHandler(response,error,401)
     }
 })
+
+// UPDATE USER PASSWORD : 
+router.post("/update-password",jwtAuth,async (request: Request, response: Response) => {
+    const {oldpass,newpass} = request.body
+    try {
+        const user = await User.findById( request.query.id )
+        if(user?.password === oldpass) await User.findByIdAndUpdate( request.query.id ,{
+            password:newpass
+        })
+        const data = {
+            message:"user password updated"
+        }
+        successHandler(response,data,200)
+    } catch (error) {
+        errorHandler(response,error,401)
+    }
+})
+
+// router.get("/logout", jwtAuth , async (request: Request, response: Response) =>{
+//     try {
+//         const id = request.query.id
+//         const user = await User.findById(id)
+//         if(!user) throw "user not found"
+//         const data = {message:"user logedout"}
+//         successHandler(response,data,200)
+//     } catch (error:any) {
+//         console.log(error.message);
+//         errorHandler(response,error,401)
+//     }
+// })
 
 export default router

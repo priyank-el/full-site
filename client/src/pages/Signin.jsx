@@ -42,7 +42,6 @@ const Signin = () => {
                 <h1 className='text-3xl mb-9 ms-3 font-extrabold'>Signin form </h1>
                 <Form
                     form={form}
-                    //   name="signup"
                     onFinish={onFinish}
                     style={{ maxWidth: 600 }}
                 >
