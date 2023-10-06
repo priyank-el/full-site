@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-// toast.configure()
-
 const Signup = () => {
     const [error, setError] = useState("")
     const [signup, setSignUp] = useState(false)
@@ -15,35 +13,25 @@ const Signup = () => {
 
     const navigate = useNavigate()
 
-    const onFinish = (values) => {
+    const onFinish = async (values) => {
 
         const { username, email, password } = values
-        console.log(values)
-        axios.post("http://localhost:3000/register", {
-            username,
-            email,
-            password
-        })
-            .then(response => {
-                console.log(response);
-                if (response.data.message !== "user created..") navigate("/")
-                setSignUp(true)
-                setTimeout(() => {
-                    navigate('/login')
-                }, 6000)
-
-            })
-            .catch((error) => {
-                setError(error.response.data.email)
-                console.log("Unauthenticated..")
-                navigate("/")
-            })
+        
+        const res = await axios.post("http://localhost:3000/register",{
+            username, email, password 
+        }) 
+        const data = await res.data
+        console.log(data)
+        if(data){
+            setSignUp(true)
+            if (signup) toast.success("user created successfully")
+            setTimeout(()=>navigate("/login"),6000)
+        }
     }
 
-    function toastHandler() {
-        if (error) toast.error(error)
-        if (setSignUp) toast.success("user created successfully")
-    }
+    // function toastHandler() {
+    //     if (error) toast.error(error)
+    // }
 
     return (
         <>
@@ -52,7 +40,6 @@ const Signup = () => {
                     <h1 className='text-3xl mb-9 ms-3 font-extrabold'>Signup form </h1>
                     <Form
                         form={form}
-                        //   name="signup"
                         onFinish={onFinish}
                         style={{ maxWidth: 600 }}
                     >
@@ -66,7 +53,7 @@ const Signup = () => {
                             <Input />
                         </Form.Item>
                         <Form.Item>
-                            <Button onClick={toastHandler} htmlType="submit">
+                            <Button htmlType="submit">
                                 Sign Up
                             </Button>
                             <ToastContainer />

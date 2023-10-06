@@ -6,26 +6,20 @@ const items = [
     {
         key: '1',
         label: (
-            <Link to={"/profile"}>profile</Link>
+            <Link to={"/home/profile"}>profile</Link>
         ),
     },
     {
         key: '2',
         label: (
-            <Link to={"/update-password"}>Update password</Link>
+            <Link to={"/home/update-password"}>Update password</Link>
 
         ),
     },
     {
         key: '3',
         label: (
-            <Link
-
-                onClick={(e) => {
-                    e.preventDefault()
-                    localStorage.removeItem("JwtToken")
-
-                }}>Logout</Link>
+            <Link >Logout</Link>
         ),
     },
 ];
