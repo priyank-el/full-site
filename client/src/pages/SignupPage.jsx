@@ -16,15 +16,17 @@ const Signup = () => {
     const onFinish = async (values) => {
 
         const { username, email, password } = values
-        
+        debugger
         const res = await axios.post("http://localhost:3000/register",{
-            username, email, password 
+            username:username,
+            email:email,
+            password:password
         }) 
-        const data = await res.data
-        console.log(data)
+        const data = await res.data.message
         if(data){
             setSignUp(true)
-            if (signup) toast.success("user created successfully")
+            console.log(signup)
+            if (!signup) toast.success("user created successfully")
             setTimeout(()=>navigate("/login"),6000)
         }
     }

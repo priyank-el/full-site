@@ -35,15 +35,15 @@ const UpdatePassword = () => {
                 <Form
                     onFinish={onFinish}
                 >
-                    <Form.Item name="oldpass" label="old Password" rules={[{ required: true }]}>
+                    <Form.Item name="oldpass" label="Old Password" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item name="newpass" label="new Password" rules={[{ required: true }]}>
+                    <Form.Item name="newpass" label="New Password" rules={[{ required: true }]}>
                         <Input />
                     </Form.Item>
                     <Form.Item>
                         <Button htmlType="submit">
-                            update password
+                            update
                         </Button> 
                     </Form.Item>
                 </Form>

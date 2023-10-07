@@ -7,6 +7,7 @@ import Home from "./Home";
 import ViewProfile from "./dropdownMenu/Viewprofile";
 import UpdatePassword from "./dropdownMenu/UpdatePassword";
 import axios from "axios";
+import UpdateProfile from "./dropdownMenu/UpdateProfile";
 
 function MainPage() {
   const { setLoginUser } = useContext(UserName)
@@ -16,7 +17,7 @@ function MainPage() {
   
       const navigate = useNavigate()
       useEffect(() => {
-          debugger
+          
           axios.get(`http://localhost:3000/user-profile?email=${data.id}`, {
               headers: { Authorization: token }
           })
@@ -45,6 +46,7 @@ function MainPage() {
             {/* Define your other routes here */}
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<ViewProfile />} />
+            <Route path="/update-profile" element={<UpdateProfile />} />
             <Route path="/update-password" element={<UpdatePassword />} />
           </Routes>
         </div>

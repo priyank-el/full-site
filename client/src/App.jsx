@@ -6,6 +6,7 @@ import MainPage from "./pages/MainPage";
 import Home from "./pages/Home";
 import ViewProfile from "./pages/dropdownMenu/Viewprofile";
 import UpdatePassword from "./pages/dropdownMenu/UpdatePassword";
+import UpdateProfile from "./pages/dropdownMenu/UpdateProfile";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/home" element={<MainPage />}>
             <Route path="/home/" element={<Home />} />
             <Route path="/home/profile" element={<ViewProfile />} />
+            <Route path="/home/update-profile" element={<UpdateProfile />} />
             <Route path="/home/update-password" element={<UpdatePassword />} />
           </Route>
         </Routes>
