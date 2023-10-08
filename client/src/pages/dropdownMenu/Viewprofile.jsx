@@ -13,7 +13,7 @@ const ViewProfile = () => {
                 <h1>Username:{loginUser.username}</h1>
                 <h1>Email:{loginUser.email}</h1>
                 <button 
-                    className='bg-blue-500 px-5 py-2 rounded-lg mt-4'
+                    className='bg-gray-500 px-5 py-2 rounded-lg mt-4 text-white'
                     onClick={ () => navigate("/home/update-profile") }
                     >Update profile
                 </button>
