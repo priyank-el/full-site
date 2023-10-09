@@ -5,7 +5,19 @@ const userSchema = new mongoose
     username:{
         type:String
     },
+    firstname:{
+        type:String
+    },
+    lastname:{
+        type:String
+    },
+    mobile:{
+        type:String
+    },
     email:{
+        type:String
+    },
+    image:{
         type:String
     },
     password:{

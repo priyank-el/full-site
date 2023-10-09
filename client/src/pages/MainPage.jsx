@@ -8,6 +8,7 @@ import ViewProfile from "./dropdownMenu/Viewprofile";
 import UpdatePassword from "./dropdownMenu/UpdatePassword";
 import axios from "axios";
 import UpdateProfile from "./dropdownMenu/UpdateProfile";
+import LogoutPage from "./dropdownMenu/logoutPage";
 
 function MainPage() {
   const { setLoginUser } = useContext(UserName)
@@ -48,6 +49,7 @@ function MainPage() {
             <Route path="/profile" element={<ViewProfile />} />
             <Route path="/update-profile" element={<UpdateProfile />} />
             <Route path="/update-password" element={<UpdatePassword />} />
+            <Route path="/logout" element={<LogoutPage />} />
           </Routes>
         </div>
       </div>

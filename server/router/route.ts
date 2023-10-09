@@ -4,10 +4,26 @@ import { loginUserValidator, registerUserValidator, updaterUserValidator } from 
 import secureData from '../security/data'
 import User from '../models/userSchema';
 import * as Jwt from 'jsonwebtoken'
+import * as bcrypt from 'bcrypt'
+import multer from 'multer'
 import { jwtAuth } from '../middleware/jwtAuth';
 
 const router = express.Router()
 
+
+// MULTER CODE FOR VIEW AND CAPTURE IMAGE //
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '/public/images')
+    },
+    filename: function (req, file, cb) {
+      cb(null, new Date().getTime() + '_' + file.originalname);
+    }
+  })
+  
+  const upload = multer({ storage: storage })
+
+// REGISTER USER :
 router.post("/register", registerUserValidator, async (request: Request, response: Response) => {
     try {
         const {
@@ -15,11 +31,11 @@ router.post("/register", registerUserValidator, async (request: Request, respons
             email,
             password
         } = request.body
-
+        const hasedPassword = await bcrypt.hash(password,10)
         await User.create({
             username,
             email,
-            password
+            password:hasedPassword
         })
         const data = { message: "user created.." }
         successHandler(response, data, 201)
@@ -28,6 +44,7 @@ router.post("/register", registerUserValidator, async (request: Request, respons
     }
 })
 
+// LOGIN USER :
 router.post("/login", loginUserValidator, async (request: Request, response: Response) => {
     try {
         const {
@@ -35,9 +52,11 @@ router.post("/login", loginUserValidator, async (request: Request, response: Res
             password
         } = request.body
 
-        const user = await User.findOne({ email })
-        if (user?.password !== password) throw "user password missmatch.."
+        const user:any = await User.findOne({ email })
+        
         const token = await Jwt.sign({ email:user?.email },secureData.SECRET_KEY)
+        const isEqualpassword = await bcrypt.compare(password,user?.password)
+        if(!isEqualpassword) throw "password miss match"
         const data = { 
             message: "user login.." ,
             token
@@ -48,6 +67,7 @@ router.post("/login", loginUserValidator, async (request: Request, response: Res
     }
 })
 
+// USER PROFILE API :
 router.get("/user-profile",jwtAuth,async (request: Request, response: Response) => {
     try {
         const user = await User.findOne({ email: request.query.email })
@@ -58,14 +78,23 @@ router.get("/user-profile",jwtAuth,async (request: Request, response: Response) 
     }
 })
 
-
 //  UPDATE USER PROFILE :
 router.put("/update-profile",jwtAuth,async (request: Request, response: Response) => {
     try {
+        const {
+            username,
+            email,
+            firstname,
+            lastname,
+            mobile
+        } = request.body
+
         await User.findByIdAndUpdate(request.query.id,{
-            username: request.body.username ,
-            email:request.body.email,
-            password:request.body.password
+            username,
+            email,
+            firstname,
+            lastname,
+            mobile
         })
         const data = {
             message:"user updated"
@@ -74,6 +103,17 @@ router.put("/update-profile",jwtAuth,async (request: Request, response: Response
     } catch (error) {
         errorHandler(response,error,401)
     }
+})
+
+// UPLOAD IMAGE :
+router.post('/upload',upload.single("image"),(req,res)=>{
+   try {
+     console.log("hello");
+     successHandler(res,"ok",200)
+   } catch (error) {
+        console.log(error);
+        errorHandler(res,error,401)
+   }
 })
 
 // UPDATE USER PASSWORD : 
@@ -93,17 +133,7 @@ router.post("/update-password",jwtAuth,async (request: Request, response: Respon
     }
 })
 
-// router.get("/logout", jwtAuth , async (request: Request, response: Response) =>{
-//     try {
-//         const id = request.query.id
-//         const user = await User.findById(id)
-//         if(!user) throw "user not found"
-//         const data = {message:"user logedout"}
-//         successHandler(response,data,200)
-//     } catch (error:any) {
-//         console.log(error.message);
-//         errorHandler(response,error,401)
-//     }
-// })
+// UPLOAD IMAGE IN STORAGE 
+
 
 export default router
