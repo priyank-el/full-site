@@ -7,21 +7,23 @@ import * as Jwt from 'jsonwebtoken'
 import * as bcrypt from 'bcrypt'
 import multer from 'multer'
 import { jwtAuth } from '../middleware/jwtAuth';
+import nonemptyValidator from '../validators/nonEmptyValidator';
+import fs from 'fs'
 
 const router = express.Router()
-
 
 // MULTER CODE FOR VIEW AND CAPTURE IMAGE //
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '/public/images')
+        cb(null, 'public/images');
     },
     filename: function (req, file, cb) {
-      cb(null, new Date().getTime() + '_' + file.originalname);
+        const fileName = new Date().getTime() + '_' + file.originalname;
+        cb(null, fileName);
     }
-  })
-  
-  const upload = multer({ storage: storage })
+});
+
+const upload = multer({ storage: storage });
 
 // REGISTER USER :
 router.post("/register", registerUserValidator, async (request: Request, response: Response) => {
@@ -31,11 +33,11 @@ router.post("/register", registerUserValidator, async (request: Request, respons
             email,
             password
         } = request.body
-        const hasedPassword = await bcrypt.hash(password,10)
+        const hasedPassword = await bcrypt.hash(password, 10)
         await User.create({
             username,
             email,
-            password:hasedPassword
+            password: hasedPassword
         })
         const data = { message: "user created.." }
         successHandler(response, data, 201)
@@ -52,13 +54,13 @@ router.post("/login", loginUserValidator, async (request: Request, response: Res
             password
         } = request.body
 
-        const user:any = await User.findOne({ email })
-        
-        const token = await Jwt.sign({ email:user?.email },secureData.SECRET_KEY)
-        const isEqualpassword = await bcrypt.compare(password,user?.password)
-        if(!isEqualpassword) throw "password miss match"
-        const data = { 
-            message: "user login.." ,
+        const user: any = await User.findOne({ email })
+
+        const token = await Jwt.sign({ email: user?.email }, secureData.SECRET_KEY)
+        const isEqualpassword = await bcrypt.compare(password, user?.password)
+        if (!isEqualpassword) throw "password miss match"
+        const data = {
+            message: "user login..",
             token
         }
         successHandler(response, data, 201)
@@ -68,7 +70,7 @@ router.post("/login", loginUserValidator, async (request: Request, response: Res
 })
 
 // USER PROFILE API :
-router.get("/user-profile",jwtAuth,async (request: Request, response: Response) => {
+router.get("/user-profile", jwtAuth, async (request: Request, response: Response) => {
     try {
         const user = await User.findOne({ email: request.query.email })
 
@@ -79,7 +81,7 @@ router.get("/user-profile",jwtAuth,async (request: Request, response: Response) 
 })
 
 //  UPDATE USER PROFILE :
-router.put("/update-profile",jwtAuth,async (request: Request, response: Response) => {
+router.put("/update-profile", nonemptyValidator, updaterUserValidator, jwtAuth, async (request: Request, response: Response) => {
     try {
         const {
             username,
@@ -89,7 +91,7 @@ router.put("/update-profile",jwtAuth,async (request: Request, response: Response
             mobile
         } = request.body
 
-        await User.findByIdAndUpdate(request.query.id,{
+        await User.findByIdAndUpdate(request.query.id, {
             username,
             email,
             firstname,
@@ -97,43 +99,64 @@ router.put("/update-profile",jwtAuth,async (request: Request, response: Response
             mobile
         })
         const data = {
-            message:"user updated"
+            message: "user updated"
         }
-        successHandler(response,data,200)
+        successHandler(response, data, 200)
     } catch (error) {
-        errorHandler(response,error,401)
+        errorHandler(response, error, 401)
     }
 })
 
 // UPLOAD IMAGE :
-router.post('/upload',upload.single("image"),(req,res)=>{
-   try {
-     console.log("hello");
-     successHandler(res,"ok",200)
-   } catch (error) {
-        console.log(error);
-        errorHandler(res,error,401)
-   }
-})
-
-// UPDATE USER PASSWORD : 
-router.post("/update-password",jwtAuth,async (request: Request, response: Response) => {
-    const {oldpass,newpass} = request.body
+router.post('/upload', upload.single('image'), async (request: Request, response: Response) => {
     try {
-        const user = await User.findById( request.query.id )
-        if(user?.password === oldpass) await User.findByIdAndUpdate( request.query.id ,{
-            password:newpass
-        })
-        const data = {
-            message:"user password updated"
+        const image = request.file?.filename
+        const userId = request.query.id
+
+        const user = await User.findById(userId)
+        if (user?.image) {
+            const image = user.image;
+            console.log(image);
+            fs.unlink(`public/images/${image}`, (e) => {
+                if (e) {
+                    console.log(e);
+                } else {
+                    console.log("file deleted success..");
+                }
+            });
         }
-        successHandler(response,data,200)
+
+        await User.findByIdAndUpdate(userId,
+            {
+                image
+            })
+
+        successHandler(response, { message: "image uploaded" }, 200)
     } catch (error) {
-        errorHandler(response,error,401)
+        console.log(error);
+        errorHandler(response, error, 401)
     }
 })
 
-// UPLOAD IMAGE IN STORAGE 
+// UPDATE USER PASSWORD : 
+router.post("/update-password", jwtAuth, async (request: Request, response: Response) => {
+    const { oldpass, newpass, confirmPass } = request.body
+    try {
+        if (newpass !== confirmPass) throw "Enter right password"
 
+        const newHasedPassword = await bcrypt.hash(newpass, 10)
+        const user: any = await User.findById(request.query.id)
+        const isMatchedPass = await bcrypt.compare(oldpass, user?.password)
+        if (isMatchedPass) await User.findByIdAndUpdate(request.query.id, {
+            password: newHasedPassword
+        })
+        const data = {
+            message: "user password updated"
+        }
+        successHandler(response, data, 200)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+})
 
 export default router
