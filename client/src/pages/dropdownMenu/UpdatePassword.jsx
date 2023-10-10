@@ -6,22 +6,21 @@ import { UserName } from "../../providers/ContextProvider";
 import { toast } from "react-toastify";
 
 const UpdatePassword = () => {
-  const { loginUser, setLoginUser } = useContext(UserName);
-  const navigate = useNavigate();
+  const { loginUser, setLoginUser } = useContext(UserName)
+  const navigate = useNavigate()
 
   const onFinish = async (values) => {
-    const { oldpass, newpass, confirmPass } = values;
-    console.log(values);
-
+    const { oldpass, newpass, confirmPass } = values
+    const data = {
+      oldpass,
+      newpass,
+      confirmpass
+    }
     debugger;
     try {
       const { data } = await axios.post(
         `http://localhost:3000/update-password?id=${loginUser._id}`,
-        {
-          oldpass,
-          newpass,
-          confirmPass
-        }
+        data
       )
 
       const updateUser = {
@@ -33,7 +32,7 @@ const UpdatePassword = () => {
         updatedAt: loginUser.updatedAt,
       }
 
-      if (data) setLoginUser(updateUser);
+      if (data) setLoginUser(updateUser)
       if (data.message)
         navigate("/home", {
           state: {
@@ -44,13 +43,16 @@ const UpdatePassword = () => {
     } catch (error) {
       if (error.response.data.error) toast.error(error.response.data.error)
     }
-  };
+  }
 
   return (
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="border px-16 py-20 rounded-lg shadow-lg shadow-gray-500">
         <h1 className="text-3xl mb-9 ms-3 font-extrabold">update password </h1>
-        <Form onFinish={onFinish}>
+        <Form 
+        onFinish={onFinish}
+        layout="vertical"
+        >
           <Form.Item
             name="oldpass"
             label="Old Password"
@@ -66,7 +68,7 @@ const UpdatePassword = () => {
             <Input.Password />
           </Form.Item>
           <Form.Item
-            name="confirmPass"
+            name="confirmpass"
             label="Confirm Password"
             rules={[{ required: true }]}
           >
@@ -78,7 +80,7 @@ const UpdatePassword = () => {
         </Form>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default UpdatePassword;

@@ -30,8 +30,7 @@ const UpdateProfile = () => {
 
     const formData = new FormData();
     formData.append('image', selectedFile);
-    console.log(selectedFile);
-    setFile(URL.createObjectURL(selectedFile))
+    if(selectedFile) setFile(URL.createObjectURL(selectedFile))
 
     const { username, email, firstname, lastname, mobile } = values
 
@@ -67,6 +66,7 @@ const UpdateProfile = () => {
     } catch (error) {
         console.log(error);
         if(error.response.data.error) toast.error(error.response.data.error)
+        if(error.response.data.mobile) toast.error(error.response.data.mobile)
     }
   }
 
@@ -79,11 +79,12 @@ const UpdateProfile = () => {
         onFinish={onFinish}
         initialValues={objectData}
         encType='multipart/form-data'
+        layout='vertical'
       >
         <Form.Item name="username" label="Username" rules={[{ required: true }]}>
           <Input className='w-2/3' />
         </Form.Item>
-        <Form.Item name="email" label="Email Add" rules={[{ required: true }]}>
+        <Form.Item name="email" label="Email Email" rules={[{ required: true }]}>
           <Input className='w-8/12' />
         </Form.Item>
         <Form.Item>

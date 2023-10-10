@@ -43,12 +43,13 @@ const Signup = () => {
                         form={form}
                         onFinish={onFinish}
                         style={{ maxWidth: 600 }}
+                        layout='vertical'
                     >
                         <Form.Item name="username" label="Username" rules={[{ required: true }]}>
-                            <Input className='w-12/12'/>
+                            <Input />
                         </Form.Item>
                         <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-                            <Input className='w-10/12 ms-7 px-0.5'/>
+                            <Input />
                         </Form.Item>
                         <Form.Item name="password" label="Password" rules={[{ required: true }]}>
                             <Input.Password />

@@ -83,13 +83,11 @@ router.get("/user-profile", jwtAuth, async (request: Request, response: Response
 //  UPDATE USER PROFILE :
 router.put("/update-profile", nonemptyValidator, updaterUserValidator, jwtAuth, async (request: Request, response: Response) => {
     try {
-        const {
-            username,
-            email,
-            firstname,
-            lastname,
-            mobile
-        } = request.body
+        const username = request.body.username.trim();
+        const firstname = request.body.firstname.trim();
+        const lastname = request.body.lastname.trim();
+        const mobile = request.body.mobile.trim();
+        const email = request.body.email.trim();
 
         await User.findByIdAndUpdate(request.query.id, {
             username,
@@ -140,9 +138,12 @@ router.post('/upload', upload.single('image'), async (request: Request, response
 
 // UPDATE USER PASSWORD : 
 router.post("/update-password", jwtAuth, async (request: Request, response: Response) => {
-    const { oldpass, newpass, confirmPass } = request.body
+    const oldpass = request.body.oldpass.trim()
+    const newpass = request.body.newpass.trim()
+    const confirmpass = request.body.confirmpass.trim()
+
     try {
-        if (newpass !== confirmPass) throw "Enter right password"
+        if (newpass !== confirmpass) throw "Enter right password"
 
         const newHasedPassword = await bcrypt.hash(newpass, 10)
         const user: any = await User.findById(request.query.id)
