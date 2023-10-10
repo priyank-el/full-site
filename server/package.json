@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "bun index.ts",
+    "start": "pm2 index.ts",
     "dev": "ts-node-dev index.ts"
   },
   "keywords": [],

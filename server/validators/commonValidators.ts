@@ -18,7 +18,7 @@ const updaterUserValidator = (req: Request, res: Response, next: any) => {
         email: 'string',
         firstname:'string',
         lastname:'string',
-        mobile:'string'
+        mobile:'string|min:10|max:10'
     }
     validation(updateUser, req, res, next)
 }

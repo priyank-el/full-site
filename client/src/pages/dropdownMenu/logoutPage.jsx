@@ -17,7 +17,7 @@ const LogoutPage = () => {
                             toast.success("loged out successfully")
                             navigate("/login")
                         }}
-                        className="text-white bg-red-400 hover:bg-red-500 border border-gray-400 shadow-lg rounded-lg px-1 py-1 me-1"
+                        className="text-white bg-red-400 hover:bg-red-500 border border-gray-400 shadow-lg rounded-lg px-3 py-1 me-3"
                     >
                         Logout
                     </button>
@@ -25,7 +25,7 @@ const LogoutPage = () => {
                         onClick={() => {
                             navigate("/home")
                         }}
-                        className="text-black border border-gray-400 shadow-lg rounded-lg px-1 py-1 ms-1"
+                        className="text-black border border-gray-400 shadow-lg rounded-lg px-3 py-1 ms-4"
                     >
                         Cancel
                     </button>
