@@ -14,7 +14,6 @@ const registerUserValidator = (req: Request, res: Response, next: any) => {
 const updaterUserValidator = (req: Request, res: Response, next: any) => {
     const updateUser = {
         username: 'string',
-        // email: 'isUniqueemail:User,email',
         email: 'string',
         firstname:'string',
         lastname:'string',

@@ -10,8 +10,8 @@ const UpdatePassword = () => {
   const navigate = useNavigate()
 
   const onFinish = async (values) => {
-    const { oldpass, newpass, confirmPass } = values
-    const data = {
+    const { oldpass, newpass, confirmpass } = values
+    const data2 = {
       oldpass,
       newpass,
       confirmpass
@@ -20,7 +20,7 @@ const UpdatePassword = () => {
     try {
       const { data } = await axios.post(
         `http://localhost:3000/update-password?id=${loginUser._id}`,
-        data
+        data2
       )
 
       const updateUser = {
@@ -76,7 +76,15 @@ const UpdatePassword = () => {
           </Form.Item>
           <Form.Item>
             <Button htmlType="submit">update</Button>
+            <Button 
+            htmlType="button"
+            onClick={(e)=>navigate("/home")}
+            className='ms-5'
+            >
+            cancel
+          </Button>
           </Form.Item>
+          
         </Form>
       </div>
     </div>

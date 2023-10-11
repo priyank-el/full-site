@@ -21,7 +21,8 @@ const nonemptyValidator = (request:Request,response:Response,next:any) => {
       if(filteredLastname == 0) throw "lastname should not empty"
       const filteredMobile = mobile.trim().length 
       if(filteredMobile == 0) throw "mobile number should not empty"
- 
+      const parseIntoNumber = parseInt(mobile)
+      if(!parseIntoNumber) throw "enter proper number"
      next()
    } catch (error) {
         errorHandler(response,error,401)

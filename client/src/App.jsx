@@ -8,6 +8,8 @@ import ViewProfile from "./pages/dropdownMenu/Viewprofile";
 import UpdatePassword from "./pages/dropdownMenu/UpdatePassword";
 import UpdateProfile from "./pages/dropdownMenu/UpdateProfile";
 import LogoutPage from "./pages/dropdownMenu/logoutPage";
+import OTPverification from "./pages/OtpVerification";
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -18,6 +20,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Signup />} />
+          <Route path="/otp-verify" element={<OTPverification />} />
           <Route path="/login" element={<Signin />} />
           <Route path="/home" element={<MainPage />}>
             <Route path="/home/" element={<Home />} />
