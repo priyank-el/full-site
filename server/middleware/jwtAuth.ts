@@ -15,7 +15,6 @@ const jwtAuth = async (req:Request,res:Response,next:any) => {
         req.app.locals.user = user
         next()
     } catch (error) {
-        console.log("token not added...");
         next()
     }
 }

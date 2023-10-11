@@ -23,7 +23,7 @@ const validaeWithCallback = (rules: any, req: Request, res: Response, next: any)
     validation.fails(() => {
         sendError(req, res, formattedErrors(validation.errors.errors))
     }
-    );
+    )
 }
 
 //** function for error handling */ 

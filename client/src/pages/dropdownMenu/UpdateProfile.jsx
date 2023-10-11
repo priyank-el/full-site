@@ -36,7 +36,7 @@ const UpdateProfile = () => {
 
     debugger
     if(selectedFile) {
-      const res = await axios.post(`http://localhost:3000/upload?id=${loginUser._id}`,formData)
+      await axios.post(`http://localhost:3000/upload?id=${loginUser._id}`,formData)
     }
     try {
       const response = await axios.put(`http://localhost:3000/update-profile?id=${loginUser._id}`, {
@@ -111,6 +111,13 @@ const UpdateProfile = () => {
             htmlType="submit"
             >
             Update
+          </Button>
+          <Button 
+            htmlType="button"
+            onClick={(e)=>navigate("/home/profile")}
+            className='ms-5'
+            >
+            cancel
           </Button>
         </Form.Item>
       </Form>

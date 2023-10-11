@@ -7,7 +7,7 @@ import { UserName } from '../providers/ContextProvider'
 import { toast } from "react-toastify";
 
 const Signin = () => {
-  const { setLogin } = useContext(UserName)
+  // const { setLogin } = useContext(UserName)
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
@@ -32,7 +32,20 @@ const Signin = () => {
         navigate("/login");
       }
     } catch (error) {
-      if(error.response.data.error) toast.error(error.response.data.error)
+      if (error.response.data.error == 'verify otp first') {
+        toast.error(error.response.data.error)
+        setTimeout(() => {
+          navigate("/otp-verify", {
+            state: {
+              id: email
+            }
+          })
+        }, 3000)
+      } else {
+        if (error.response.data.error) toast.error(error.response.data.error)
+      }
+      if (error.response.data.email) toast.error(error.response.data.email)
+      if (error.response.data.password) toast.error(error.response.data.password)
     }
   };
 
@@ -40,11 +53,11 @@ const Signin = () => {
     <div className="h-screen w-screen flex items-center justify-center">
       <div className="border px-16 py-20 rounded-lg shadow-lg shadow-gray-500">
         <h1 className="text-3xl mb-9 ms-3 font-extrabold">Signin form </h1>
-        <Form form={form} 
-          onFinish={onFinish} 
-          style={{ maxWidth: 600 }}
+        <Form form={form}
+          onFinish={onFinish}
+          style={{ maxWidth: 600, minWidth: 300 }}
           layout='vertical'
-          >
+        >
           <Form.Item name="email" label="Email" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
