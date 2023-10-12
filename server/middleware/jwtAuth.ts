@@ -2,7 +2,6 @@ import * as Jwt from 'jsonwebtoken'
 import data from '../security/data'
 import User from '../models/userSchema'
 import { Request, Response } from 'express'
-import { errorHandler } from '../handler/responseHandler'
 
 const jwtAuth = async (req:Request,res:Response,next:any) => {
     try {

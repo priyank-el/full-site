@@ -25,7 +25,6 @@ function MainPage() {
               .then(response => {
                   if (!(localStorage.getItem("JwtToken"))) navigate("/login")
                   setLoginUser(() => response.data)
-                  console.log(response.data);
               })
               .catch((error) => {
                   if (!(error.response.data.token)) navigate("/login")

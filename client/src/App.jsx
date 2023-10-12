@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import "./App.css";
 import Signup from "./pages/SignupPage";
 import Signin from "./pages/Signin";
@@ -9,6 +10,8 @@ import UpdatePassword from "./pages/dropdownMenu/UpdatePassword";
 import UpdateProfile from "./pages/dropdownMenu/UpdateProfile";
 import LogoutPage from "./pages/dropdownMenu/logoutPage";
 import OTPverification from "./pages/OtpVerification";
+import ForgotPassword from "./pages/ForgotPassword";
+import CreatePassword from "./pages/CreateNewPassword";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +24,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Signup />} />
           <Route path="/otp-verify" element={<OTPverification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/update-password" element={<CreatePassword />} />
           <Route path="/login" element={<Signin />} />
           <Route path="/home" element={<MainPage />}>
             <Route path="/home/" element={<Home />} />
