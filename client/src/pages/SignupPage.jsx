@@ -34,6 +34,7 @@ const Signup = () => {
             if (error.response.data.email) toast.error(error.response.data.email)
             if (error.response.data.username) toast.error(error.response.data.username)
             if (error.response.data.password) toast.error(error.response.data.password)
+            if (error.response.data.error) toast.error(error.response.data.error)
         }
     }
 
@@ -62,7 +63,6 @@ const Signup = () => {
                             <Button htmlType="submit">
                                 Sign Up
                             </Button>
-                            <ToastContainer />
                         </Form.Item>
                     </Form>
                     <div className='rounded-lg my-2'>

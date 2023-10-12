@@ -3,7 +3,7 @@ import { loginUserValidator, registerUserValidator, updaterUserValidator } from 
 import multer from 'multer'
 import { jwtAuth } from '../middleware/jwtAuth';
 import nonemptyValidator from '../validators/nonEmptyValidator';
-import { resendOtp, signInUser, signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp } from '../controllers/userController';
+import { resendOtp, signInUser, signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword } from '../controllers/userController';
 import fs from 'fs';
 import User from '../models/userSchema';
 import { errorHandler, successHandler } from '../handler/responseHandler';
@@ -31,6 +31,12 @@ router.post("/otp-verify", verifyOtp)
 
 // RESEND OTP :
 router.post("/resend-otp",resendOtp)
+
+// FORGOT PASSWORD :
+router.post("/forgot-password",forgotUserPassword)
+
+// UPDATE NEW PASSWORD :
+router.post("/update-password",createNewPassword)
 
 // LOGIN USER :
 router.post("/login", loginUserValidator, signInUser)
@@ -73,6 +79,6 @@ router.post('/upload', upload.single('image'), async (request: Request, response
 })
 
 // UPDATE PASSWORD :
-router.post("/update-password", jwtAuth, updatePassword)
+router.post("/update-loginuser-password", jwtAuth, updatePassword)
 
 export default router

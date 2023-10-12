@@ -1,13 +1,10 @@
-import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { UserName } from '../providers/ContextProvider'
 import { toast } from "react-toastify";
 
 const Signin = () => {
-  // const { setLogin } = useContext(UserName)
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
@@ -72,8 +69,15 @@ const Signin = () => {
             <Button htmlType="submit">sign in</Button>
           </Form.Item>
         </Form>
+        {/* <div className="rounded-lg my-2">
+          <Link to="/forgot-password" 
+            className="text-sm flex justify-center font-extrabold text-blue-600 cursor-pointer">
+            forgot password!
+          </Link>
+        </div> */}
         <div className="rounded-lg my-2">
-          <Link to="/" className="text-sm underline">
+          <Link to="/" 
+            className="text-sm underline flex justify-center">
             create account first!
           </Link>
         </div>
