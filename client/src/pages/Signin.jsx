@@ -69,12 +69,12 @@ const Signin = () => {
             <Button htmlType="submit">sign in</Button>
           </Form.Item>
         </Form>
-        {/* <div className="rounded-lg my-2">
+        <div className="rounded-lg my-2">
           <Link to="/forgot-password" 
             className="text-sm flex justify-center font-extrabold text-blue-600 cursor-pointer">
             forgot password!
           </Link>
-        </div> */}
+        </div>
         <div className="rounded-lg my-2">
           <Link to="/" 
             className="text-sm underline flex justify-center">
