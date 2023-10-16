@@ -7,6 +7,9 @@ import secureData from '../security/data'
 import User from "../models/userSchema";
 import * as bcrypt from 'bcrypt';
 import * as Jwt from 'jsonwebtoken';
+import Country from '../models/countrySchema';
+import State from '../models/stateSchema';
+import City from '../models/citySchema';
 
 const signupUser = async (request: Request, response: Response) => {
     const {
@@ -237,13 +240,15 @@ const updateUserProfile = async (request: Request, response: Response) => {
         const lastname = request.body.lastname.trim();
         const mobile = request.body.mobile.trim();
         const email = request.body.email.trim();
+        const address = request.body.address
 
         await User.findByIdAndUpdate(request.query.id, {
             username,
             email,
             firstname,
             lastname,
-            mobile
+            mobile,
+            address
         })
         const data = {
             message: "user updated"
@@ -255,7 +260,7 @@ const updateUserProfile = async (request: Request, response: Response) => {
 }
 
 const updatePassword = async (request: Request, response: Response) => {
-    
+
     const oldpass = request.body.oldpass.trim()
     const newpass = request.body.newpass.trim()
     const confirmpass = request.body.confirmpass.trim()
@@ -278,6 +283,88 @@ const updatePassword = async (request: Request, response: Response) => {
     }
 }
 
+const addCountry = async (request: Request, response: Response) => {
+    try {
+        const {
+            name
+        } = request.body
+
+        await Country.create({
+            name
+        })
+
+        successHandler(response, { message: "added country" }, 201)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const addState = async (request: Request, response: Response) => {
+    try {
+        const {
+            name,
+            country
+        } = request.body
+
+        await State.create({
+            name,
+            country
+        })
+
+        successHandler(response, { message: "added state" }, 201)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const addCity = async (request: Request, response: Response) => {
+    try {
+        const {
+            name,
+            state
+        } = request.body
+
+        await City.create({
+            name,
+            state
+        })
+
+        successHandler(response, { message: "city added" }, 201)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const getAllCountry = async (request: Request, response: Response) => {
+    try {
+        const countries = await Country.find()
+
+        successHandler(response, countries, 200)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const getAllStates = async (request: Request, response: Response) => {
+    try {
+        const states = await State.find({ country: request.query.country })
+
+        successHandler(response, states, 200)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const getAllCities = async (request: Request, response: Response) => {
+    try {
+        const cities = await City.find({state:request.query.state})
+    
+        successHandler(response,cities,200)
+    } catch (error) {
+        errorHandler(response,error,401)
+    }
+}
+
 export {
     signupUser,
     verifyOtp,
@@ -286,7 +373,12 @@ export {
     signInUser,
     userProfile,
     updateUserProfile,
-    // fileUpload,
     updatePassword,
-    resendOtp
+    resendOtp,
+    addCountry,
+    addState,
+    addCity,
+    getAllCountry,
+    getAllStates,
+    getAllCities
 }

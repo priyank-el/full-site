@@ -20,6 +20,9 @@ const userSchema = new mongoose
         image: {
             type: String
         },
+        address:{
+            type:String
+        },
         password: {
             type: String
         },

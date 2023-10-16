@@ -15,7 +15,7 @@ function Header() {
                 </div>
                 <div className=' h-14 text-center rounded-md items-center justify-center col-start-8 col-span-3 grid grid-cols-3'>
                 </div>
-                <div className='w-full h-full rounded-lg col-start-12'>
+                <div className='w-full h-full rounded-lg col-start-12 flex justify-center items-center'>
                     < DropdownMenu />
                 </div>
             </div>

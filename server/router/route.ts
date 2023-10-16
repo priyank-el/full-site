@@ -3,7 +3,7 @@ import { loginUserValidator, registerUserValidator, updaterUserValidator } from 
 import multer from 'multer'
 import { jwtAuth } from '../middleware/jwtAuth';
 import nonemptyValidator from '../validators/nonEmptyValidator';
-import { resendOtp, signInUser, signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword } from '../controllers/userController';
+import { addState,getAllStates,addCity,getAllCities,resendOtp, signInUser, signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword,addCountry,getAllCountry } from '../controllers/userController';
 import fs from 'fs';
 import User from '../models/userSchema';
 import { errorHandler, successHandler } from '../handler/responseHandler';
@@ -56,7 +56,6 @@ router.post('/upload', upload.single('image'), async (request: Request, response
         const user = await User.findById(userId)
         if (user?.image) {
             const image = user.image;
-            console.log(image);
             fs.unlink(`public/images/${image}`, (e) => {
                 if (e) {
                     console.log(e);
@@ -80,5 +79,15 @@ router.post('/upload', upload.single('image'), async (request: Request, response
 
 // UPDATE PASSWORD :
 router.post("/update-loginuser-password", jwtAuth, updatePassword)
+
+// API FOR ADD : 
+router.post('/add-country',addCountry)
+router.post('/add-state',addState)
+router.post('/add-city',addCity)
+
+// API FOR VIEW ALL LIST :
+router.get('/all-countries',getAllCountry)
+router.get('/all-states',getAllStates)
+router.get('/all-cities',getAllCities)
 
 export default router
