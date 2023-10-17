@@ -9,6 +9,9 @@ const nonemptyValidator = (request:Request,response:Response,next:any) => {
      const lastname = request.body.lastname
      const mobile = request.body.mobile
      const email = request.body.email.trim();
+     const city = request.body.cityName
+     const state = request.body.stateName
+     const country = request.body.countryName
 
       const check = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       const isEmail = check.test(email)
@@ -23,6 +26,9 @@ const nonemptyValidator = (request:Request,response:Response,next:any) => {
       if(filteredMobile == 0) throw "mobile number should not empty"
       const parseIntoNumber = parseInt(mobile)
       if(!parseIntoNumber) throw "enter proper number"
+      if(!country) throw "enter country name"
+      if(!state) throw "enter state name"
+      if(!city) throw "enter city name"
      next()
    } catch (error) {
         errorHandler(response,error,401)

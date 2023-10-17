@@ -15,6 +15,9 @@ import CreatePassword from "./pages/CreateNewPassword";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddProduct from "./pages/product/addProduct";
+import Allproducts from "./pages/product/allProducts";
+import UpdateProduct from "./pages/product/updateProduct";
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
             <Route path="/home/profile" element={<ViewProfile />} />
             <Route path="/home/update-profile" element={<UpdateProfile />} />
             <Route path="/home/update-password" element={<UpdatePassword />} />
+            <Route path="/home/product" element={<AddProduct />} />
+            <Route path="/home/update-product" element={<UpdateProduct />} />
+            <Route path="/home/all-products" element={<Allproducts />} />
             <Route path="/home/logout" element={<LogoutPage />} />
           </Route>
         </Routes>
