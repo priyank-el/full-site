@@ -39,7 +39,6 @@ const UpdateProfile = () => {
     
 
     const { username, email, firstname, lastname, mobile } = values
-    const address = `${cityName} (${stateName}) in ${countryName}`
 
     debugger
     if (selectedFile) {
@@ -52,7 +51,9 @@ const UpdateProfile = () => {
         firstname: firstname,
         lastname: lastname,
         mobile: mobile,
-        address
+        cityName,
+        stateName,
+        countryName
       })
 
       const updateUser = {
@@ -72,7 +73,6 @@ const UpdateProfile = () => {
       toast.success(response.data.message)
 
     } catch (error) {
-      console.log(error);
       if (error.response.data.error) toast.error(error.response.data.error)
       if (error.response.data.mobile) toast.error(error.response.data.mobile)
     }

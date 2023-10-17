@@ -3,10 +3,11 @@ import { loginUserValidator, registerUserValidator, updaterUserValidator } from 
 import multer from 'multer'
 import { jwtAuth } from '../middleware/jwtAuth';
 import nonemptyValidator from '../validators/nonEmptyValidator';
-import { addState,getAllStates,addCity,getAllCities,resendOtp, signInUser, signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword,addCountry,getAllCountry } from '../controllers/userController';
+import { addState,getAllStates,addCity,getAllCities,resendOtp,updateProduct,deleteProduct,addProductData, getAllProducts,signInUser, productById,signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword,addCountry,getAllCountry } from '../controllers/userController';
 import fs from 'fs';
 import User from '../models/userSchema';
 import { errorHandler, successHandler } from '../handler/responseHandler';
+import { addProductValidator } from '../validators/allCustomChecker';
 
 const router = express.Router()
 
@@ -47,7 +48,7 @@ router.get("/user-profile", jwtAuth, userProfile)
 //  UPDATE USER PROFILE :
 router.put("/update-profile", nonemptyValidator, updaterUserValidator, jwtAuth, updateUserProfile)
 
-// UPLOAD IMAGE :
+// UPLOAD USER IMAGE :
 router.post('/upload', upload.single('image'), async (request: Request, response: Response) => {
     try {
         const image = request.file?.filename
@@ -76,6 +77,21 @@ router.post('/upload', upload.single('image'), async (request: Request, response
         errorHandler(response, error, 401)
     }
 })
+
+// CREATE PRODUCT :
+router.post('/add-product',upload.single('image'),addProductValidator,addProductData)
+
+// GET PRODUCT BY ID :
+router.get("/product-data",productById)
+
+// Update product :
+router.put('/update-product',upload.single('image'),updateProduct)
+
+//  DELETE PRODUCT :
+router.delete('/delete-product',deleteProduct)
+
+// GET ALL PRODUCTS :
+router.get('/all-products',getAllProducts)
 
 // UPDATE PASSWORD :
 router.post("/update-loginuser-password", jwtAuth, updatePassword)

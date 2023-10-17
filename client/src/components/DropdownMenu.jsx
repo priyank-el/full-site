@@ -35,7 +35,7 @@ function DropdownMenu() {
             placement="bottom"
             arrow
         >
-            <img className="rounded-full h-10 w-10 mt-1" src={ loginUser.image ? `http://localhost:3000/images/${loginUser.image}` : file || "https://images.unsplash.com/photo-1606663889134-b1dedb5ed8b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2FydG9vbiUyMGNoYXJhY3RlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60" }/>
+            <img className="rounded-full h-10 w-10 mt-1" src={ loginUser.image ? `http://localhost:3000/images/${loginUser.image}` : "https://images.unsplash.com/photo-1606663889134-b1dedb5ed8b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2FydG9vbiUyMGNoYXJhY3RlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60" }/>
         </Dropdown>
     ) 
 }

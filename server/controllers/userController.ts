@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import fs from 'fs'
 import nodemailer from 'nodemailer';
 import otpGenerator from 'otp-generator';
 
@@ -10,6 +11,7 @@ import * as Jwt from 'jsonwebtoken';
 import Country from '../models/countrySchema';
 import State from '../models/stateSchema';
 import City from '../models/citySchema';
+import Product from '../models/productSchema';
 
 const signupUser = async (request: Request, response: Response) => {
     const {
@@ -240,7 +242,7 @@ const updateUserProfile = async (request: Request, response: Response) => {
         const lastname = request.body.lastname.trim();
         const mobile = request.body.mobile.trim();
         const email = request.body.email.trim();
-        const address = request.body.address
+        const address = `${request.body.cityName} (${request.body.stateName}) in ${request.body.countryName}`
 
         await User.findByIdAndUpdate(request.query.id, {
             username,
@@ -357,11 +359,108 @@ const getAllStates = async (request: Request, response: Response) => {
 
 const getAllCities = async (request: Request, response: Response) => {
     try {
-        const cities = await City.find({state:request.query.state})
-    
-        successHandler(response,cities,200)
+        const cities = await City.find({ state: request.query.state })
+
+        successHandler(response, cities, 200)
     } catch (error) {
-        errorHandler(response,error,401)
+        errorHandler(response, error, 401)
+    }
+}
+
+const addProductData = async (request: Request, response: Response) => {
+    const image = request.file?.filename
+    const userId = request.query.userId
+
+    try {
+        const name = request.query.name
+        const description = request.query.description
+        await Product.create({
+            productName: name,
+            productDescription: description,
+            userId,
+            image
+        })
+
+        successHandler(response, { message: "product created" }, 201)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+
+}
+
+const getAllProducts = async (request: Request, response: Response) => {
+    try {
+        const products = await Product.find({ userId: request.query.userId })
+
+        successHandler(response, products, 200)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const productById = async (request: Request, response: Response) => {
+    try {
+        const product = await Product.findById(request.query.productId)
+
+        successHandler(response, product, 200)
+    } catch (error) {
+        errorHandler(response, error, 400)
+    }
+}
+
+const updateProduct = async (request: Request, response: Response) => {
+
+    const productName = request.query.name
+    const productDescription = request.query.description
+    const image = request.file?.filename
+
+    const product = await Product.findById(request.query.id)
+
+    if (product?.image) {
+        const imageData = product.image;
+        fs.unlink(`public/images/${imageData}`, (e) => {
+            if (e) {
+                console.log(e);
+            } else {
+                console.log("file deleted success..");
+            }
+        });
+    }
+
+    try {
+        await Product.findByIdAndUpdate(request.query.id, {
+            productName: productName,
+            productDescription: productDescription,
+            image
+        })
+
+        successHandler(response, { message: "product updated" }, 200)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const deleteProduct = async (request: Request, response: Response) => {
+    
+    try {
+        const product = await Product.findById(request.query.id)
+    
+        if (product?.image) {
+            const imageData = product.image;
+            fs.unlink(`public/images/${imageData}`, (e) => {
+                if (e) {
+                    console.log(e);
+                } else {
+                    console.log("file deleted success..");
+                }
+            });
+        }
+    
+        await Product.findByIdAndDelete(request.query.id)
+
+        successHandler(response,{message:"product deleted"},200)
+    } catch (error) {
+        errorHandler(response,error,400)
     }
 }
 
@@ -380,5 +479,10 @@ export {
     addCity,
     getAllCountry,
     getAllStates,
-    getAllCities
+    getAllCities,
+    addProductData,
+    getAllProducts,
+    productById,
+    updateProduct,
+    deleteProduct
 }
