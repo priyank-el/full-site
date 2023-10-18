@@ -9,6 +9,7 @@ import {toast} from 'react-toastify'
 function UpdateProduct() {
 
     const [product, setProduct] = useState({})
+    const [loading,setLoading] = useState(true)
     const [selectedFile, setSelectedFile] = useState();
     const [form] = Form.useForm()
     const location = useLocation()
@@ -33,7 +34,11 @@ function UpdateProduct() {
             try {
                 const { data } = await axios.get(`http://localhost:3000/product-data?productId=${productId}`)
 
-                if (data) setProduct(data)
+                if (data) {
+                    setProduct(data)
+                    setLoading(false)
+                }
+            
             } catch (error) {
                 console.log(error);
             }
@@ -69,6 +74,10 @@ function UpdateProduct() {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    if(loading){
+        return <h1>Loading..</h1>
     }
 
     return (
@@ -109,7 +118,7 @@ function UpdateProduct() {
                         </Button>
                         <Button
                             htmlType="button"
-                            onClick={(e) => navigate("/home/profile")}
+                            onClick={(e) => navigate("/home/all-products")}
                             className='ms-5'
                         >
                             cancel
