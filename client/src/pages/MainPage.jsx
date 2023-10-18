@@ -12,6 +12,7 @@ import LogoutPage from "./dropdownMenu/logoutPage";
 import AddProduct from "./product/addProduct";
 import Allproducts from "./product/allProducts";
 import UpdateProduct from "./product/updateProduct";
+import ViewproductData from "./product/ViewproductData";
 
 function MainPage() {
   const { setLoginUser } = useContext(UserName)
@@ -53,6 +54,7 @@ function MainPage() {
             <Route path="/update-profile" element={<UpdateProfile />} />
             <Route path="/update-password" element={<UpdatePassword />} />
             <Route path="/product" element={<AddProduct />} />
+            <Route path="/view-product" element={<ViewproductData />} />
             <Route path="/update-product" element={<UpdateProduct />} />
             <Route path="/all-products" element={<Allproducts />} />
             <Route path="/logout" element={<LogoutPage />} />

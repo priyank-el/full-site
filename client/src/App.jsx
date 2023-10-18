@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AddProduct from "./pages/product/addProduct";
 import Allproducts from "./pages/product/allProducts";
 import UpdateProduct from "./pages/product/updateProduct";
+import ViewproductData from "./pages/product/ViewproductData";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/home/update-profile" element={<UpdateProfile />} />
             <Route path="/home/update-password" element={<UpdatePassword />} />
             <Route path="/home/product" element={<AddProduct />} />
+            <Route path="/home/view-product" element={<ViewproductData />} />
             <Route path="/home/update-product" element={<UpdateProduct />} />
             <Route path="/home/all-products" element={<Allproducts />} />
             <Route path="/home/logout" element={<LogoutPage />} />
