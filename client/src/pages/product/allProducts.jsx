@@ -45,7 +45,6 @@ function Allproducts() {
     }
     const isOk = () => {
         setIsModalOpen(false)
-        setPermission(true)
         deleteData()
         setLoading(true)
     }
