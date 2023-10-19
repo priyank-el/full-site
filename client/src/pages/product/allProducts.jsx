@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import { UserName } from "../../providers/ContextProvider"
 import { useNavigate } from "react-router-dom"
 import { toast } from 'react-toastify'
-import { Modal, Select, Table } from "antd"
+import { Input, Modal, Select, Table } from "antd"
 
 function Allproducts() {
 
@@ -11,6 +11,7 @@ function Allproducts() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
+    const [value,setValue] = useState('')
     const [Id, setId] = useState('')
     const { loginUser } = useContext(UserName)
 
@@ -18,7 +19,7 @@ function Allproducts() {
         const fetchAllProducts = async () => {
             try {
                 debugger
-                const { data } = await axios.get(`http://localhost:3000/all-products?userId=${loginUser._id}`)
+                const { data } = await axios.get(`http://localhost:3000/all-products?userId=${loginUser._id}&value=${value.trim()}`)
 
                 if (data) {
                     setProducts(data)
@@ -29,7 +30,15 @@ function Allproducts() {
             }
         }
         fetchAllProducts()
-    }, [setProducts, loading])
+    }, [setProducts, loading , value])
+
+
+    const handletextChange = (e) => {
+
+        const data = e.target.value;
+
+        setValue(data)
+    }
 
     const deleteData = async () => {
         try {
@@ -183,6 +192,9 @@ function Allproducts() {
                 
             </div>
             }
+            <div className="w-80">
+            Search :<Input className="me-96" onChange={handletextChange}/>
+            </div>
             <Table 
                 dataSource={datasource} 
                 columns={columns} 
