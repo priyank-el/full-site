@@ -12,6 +12,7 @@ import Country from '../models/countrySchema';
 import State from '../models/stateSchema';
 import City from '../models/citySchema';
 import Product from '../models/productSchema';
+import mongoose from 'mongoose';
 
 const signupUser = async (request: Request, response: Response) => {
     const {
@@ -390,7 +391,22 @@ const addProductData = async (request: Request, response: Response) => {
 
 const getAllProducts = async (request: Request, response: Response) => {
     try {
-        const products = await Product.find({ userId: request.query.userId })
+        const value = request.query.value
+        const id:any = request.query.userId
+        const userId = new mongoose.Types.ObjectId(id)
+        const searchData = request.query.value
+      ? {
+        $match: {
+            productName: { $regex: value, $options: 'i' } 
+        },
+      }
+      : { $match: {} };
+        const products = await Product.aggregate([
+            { $match: {
+                userId
+            } },
+            searchData
+        ])
 
         successHandler(response, products, 200)
     } catch (error) {

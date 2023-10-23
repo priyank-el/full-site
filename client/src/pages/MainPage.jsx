@@ -1,6 +1,6 @@
-import { Route, Routes, useLocation,useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { UserName } from "../providers/ContextProvider";
-import { useContext,useEffect } from "react";
+import { useContext, useEffect } from "react";
 import SideBar from "../components/SideBar";
 import Header from "./Header";
 import Home from "./Home";
@@ -14,34 +14,38 @@ import Allproducts from "./product/allProducts";
 import UpdateProduct from "./product/updateProduct";
 import ViewproductData from "./product/ViewproductData";
 
-function MainPage() {
-  const { setLoginUser } = useContext(UserName)
-      const location = useLocation();
-      const data = location.state;
-      const token = localStorage.getItem("JwtToken")
-  
-      const navigate = useNavigate()
-      useEffect(() => {
-          
-          axios.get(`http://localhost:3000/user-profile?email=${data.id}`, {
-              headers: { Authorization: token }
-          })
-              .then(response => {
-                  if (!(localStorage.getItem("JwtToken"))) navigate("/login")
-                  setLoginUser(() => response.data)
-              })
-              .catch((error) => {
-                  if (!(error.response.data.token)) navigate("/login")
-                  alert("fall inside catch")
-              })
-      }, [setLoginUser])
+function MainPage(props) {
+  const { setLoginUser,setToken,token } = useContext(UserName)
+  const location = useLocation();
+  const dataObject = location.state;
+  const authToken = localStorage.getItem("JwtToken")
+
+  const navigate = useNavigate()
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        debugger
+        const { data } = await axios.get(`http://localhost:3000/user-profile?email=${dataObject.id}`, {
+          headers: { Authorization: authToken }
+        })
+
+        if(data) setToken(authToken)
+        console.log(token);
+        setLoginUser(() => data)
+      } catch (error) {
+        navigate("/login")
+      }
+    }
+    fetchData()
+  }, [setLoginUser])
   return (
     <>
-      <Header />
-      <div className="grid grid-cols-6 mx-2">
+      
+      {/* <div className="grid grid-cols-6 mx-2">
         <div className="col-start-1 h-screen fixed rounded-md bg-slate-500">
           <SideBar />
-        </div>
+        </div> */}
         <div className="col-start-2 col-span-5 m-3 overflow-hidden">
           {/* 
             Remove the routes for ViewProfile and UpdatePassword from here 
@@ -60,7 +64,7 @@ function MainPage() {
             <Route path="/logout" element={<LogoutPage />} />
           </Routes>
         </div>
-      </div>
+      {/* </div> */}
     </>
   );
 }
