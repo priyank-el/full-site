@@ -20,7 +20,7 @@ const Signin = () => {
       if (data) {
         localStorage.setItem("JwtToken", data.token);
         toast.success("user login done")
-        navigate("/home", {
+        navigate("/home/", {
           state: {
             id: email,
           }

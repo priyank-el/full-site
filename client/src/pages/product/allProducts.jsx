@@ -1,9 +1,10 @@
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import { UserName } from "../../providers/ContextProvider"
-import { useNavigate } from "react-router-dom"
+import { redirect, useNavigate } from "react-router-dom"
 import { toast } from 'react-toastify'
 import { Input, Modal, Select, Table } from "antd"
+import Signin from "../Signin"
 
 function Allproducts() {
 
@@ -11,7 +12,7 @@ function Allproducts() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
-    const [value,setValue] = useState('')
+    const [value, setValue] = useState('')
     const [Id, setId] = useState('')
     const { loginUser } = useContext(UserName)
 
@@ -19,7 +20,11 @@ function Allproducts() {
         const fetchAllProducts = async () => {
             try {
                 debugger
-                const { data } = await axios.get(`http://localhost:3000/all-products?userId=${loginUser._id}&value=${value.trim()}`)
+                const { data } = await axios.get(`http://localhost:3000/all-products?userId=${loginUser._id}&value=${value.trim()}`,{
+                    headers:{
+                        Authorization:localStorage.getItem("JwtToken")
+                    }
+                })
 
                 if (data) {
                     setProducts(data)
@@ -27,10 +32,13 @@ function Allproducts() {
                 }
             } catch (error) {
                 console.log(error)
+                if (error.response.data.error.message) {
+                    navigate('/login')
+                }
             }
         }
         fetchAllProducts()
-    }, [setProducts, loading , value])
+    }, [setProducts, loading, value])
 
 
     const handletextChange = (e) => {
@@ -93,7 +101,7 @@ function Allproducts() {
                     onChange={(value) => {
 
                         if (value == 'edit') {
-                            
+
                             navigate("/home/update-product", {
                                 state: {
                                     id: _._id
@@ -160,48 +168,49 @@ function Allproducts() {
                 : <h1 className="text-center font-extrabold text-3xl">No products found</h1>
             }
             {
-                <div>
-                <Modal
-                    style={{
-                        height: "800px"
-                    }}
-                    open={isModalOpen}
-                    onHide={() => {
-                        setIsModalOpen(false)
-                        setLoading(true)
-                    }}
-                    dialogClassName="modal-90w"
-                    aria-labelledby="contained-modal-title-vcenter"
-                    onOk={isOk}
-                    okButtonProps={{ style: { backgroundColor: "green" } }}
-                    onCancel={() => {
-                        setIsModalOpen(false)
-                        setLoading(true)
-                    }
-                    }
-                    cancelButtonProps={{
-                        style: {
-                            backgroundColor: "red",
-                            color: "white"
-                        }
-                    }}
-                >
-                    <p className="text-3xl text-center">Are you sure ?</p>
-                    <p className="text-center">You want to delete post?</p>
-                </Modal>
                 
-            </div>
+                <div>
+                    <Modal
+                        style={{
+                            height: "800px"
+                        }}
+                        open={isModalOpen}
+                        onHide={() => {
+                            setIsModalOpen(false)
+                            setLoading(true)
+                        }}
+                        dialogClassName="modal-90w"
+                        aria-labelledby="contained-modal-title-vcenter"
+                        onOk={isOk}
+                        okButtonProps={{ style: { backgroundColor: "green" } }}
+                        onCancel={() => {
+                            setIsModalOpen(false)
+                            setLoading(true)
+                        }
+                        }
+                        cancelButtonProps={{
+                            style: {
+                                backgroundColor: "red",
+                                color: "white"
+                            }
+                        }}
+                    >
+                        <p className="text-3xl text-center">Are you sure ?</p>
+                        <p className="text-center">You want to delete post?</p>
+                    </Modal>
+
+                </div>
             }
             <div className="w-80">
-            Search :<Input className="me-96" onChange={handletextChange}/>
+                Search :<Input className="me-96" onChange={handletextChange} />
             </div>
-            <Table 
-                dataSource={datasource} 
-                columns={columns} 
+            <Table
+                dataSource={datasource}
+                columns={columns}
                 pagination={{
-                    pageSize:1,
-                    total:products.length,
-                    defaultCurrent:1
+                    pageSize: 1,
+                    total: products.length,
+                    defaultCurrent: 1
                 }}
             />
         </>

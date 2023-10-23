@@ -91,7 +91,7 @@ router.put('/update-product',upload.single('image'),updateProduct)
 router.delete('/delete-product',deleteProduct)
 
 // GET ALL PRODUCTS :
-router.get('/all-products',getAllProducts)
+router.get('/all-products',jwtAuth,getAllProducts)
 
 // UPDATE PASSWORD :
 router.post("/update-loginuser-password", jwtAuth, updatePassword)

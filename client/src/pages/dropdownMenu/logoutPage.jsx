@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { UserName } from '../../providers/ContextProvider';
 
 const LogoutPage = () => {
     const navigate = useNavigate()
+    const {loginUser} = useContext(UserName)
     return (
         <>
             <div className='h-screen w-screen flex items-center justify-center'>
@@ -23,7 +25,12 @@ const LogoutPage = () => {
                     </button>
                     <button
                         onClick={() => {
-                            navigate("/home")
+                            debugger
+                            navigate("/home",{
+                                state:{
+                                    id:loginUser.email
+                                }
+                            })
                         }}
                         className="text-black border border-gray-400 shadow-lg rounded-lg px-3 py-1 ms-4"
                     >
