@@ -6,13 +6,16 @@ function ViewproductData() {
     const data = location.state
 
     const isImage = ['.gif','.jpg','.jpeg','.png']; //you can add more
+    function checkURL(url) {
+      return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+  }
 
   return (
     <>
         <div className="flex justify-center items-center">
             <div>
                 {
-                  isImage.includes(data.data.image) 
+                  checkURL(data.data.image) 
                   ?
                   <img className="h-96 w-96 mx-auto rounded-md" src={`http://localhost:3000/images/${data.data.image}`} alt="image comes here" />
                   :
