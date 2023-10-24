@@ -99,7 +99,7 @@ function Allproducts() {
             ?
             <img src={`http://localhost:3000/images/${text}`} className="h-14 w-14 rounded-lg" ></img>
             :
-            <video src={`http://localhost:3000/images/${text}`} autoPlay className="h-14 w-14 rounded-lg"></video>
+            <video src={`http://localhost:3000/images/${text}`} className="h-14 w-14 rounded-lg"></video>
         },
         {
             title: 'Action',
@@ -136,7 +136,7 @@ function Allproducts() {
                                 if (data) {
                                     navigate("/home/view-product", {
                                         state: {
-                                            data: _
+                                            data: data
                                         }
                                     })
                                 }
@@ -165,6 +165,9 @@ function Allproducts() {
     ]
 
     const datasource = products.map((product, index) => {
+        if(product.thumbnail){
+            product.image = product.thumbnail
+        }
         return {
             ...product,
             key: index + 1

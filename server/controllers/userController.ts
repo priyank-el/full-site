@@ -13,6 +13,16 @@ import State from '../models/stateSchema';
 import City from '../models/citySchema';
 import Product from '../models/productSchema';
 import mongoose from 'mongoose';
+import path from 'path'
+
+const
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path,
+    ffprobePath = require('@ffprobe-installer/ffprobe').path,
+    ffmpeg = require('fluent-ffmpeg')
+
+
+ffmpeg.setFfprobePath(ffprobePath);
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 const signupUser = async (request: Request, response: Response) => {
     const {
@@ -368,43 +378,76 @@ const getAllCities = async (request: Request, response: Response) => {
     }
 }
 
+function checkURL(url: any) {
+    return (url.match(/\.(mp4)$/) != null);
+}
+
 const addProductData = async (request: Request, response: Response) => {
     const image = request.file?.filename
     const userId = request.query.userId
 
-    try {
-        const name = request.query.name
-        const description = request.query.description
-        await Product.create({
-            productName: name,
-            productDescription: description,
-            userId,
-            image
-        })
+    const name = request.query.name
+    const description = request.query.description
 
-        successHandler(response, { message: "product created" }, 201)
-    } catch (error) {
-        errorHandler(response, error, 401)
+    if (checkURL(`public/images/${image}`)) {
+        const onlyName = image?.split('.mp4')[0]
+        await ffmpeg(`public/images/${image}`)
+            .screenshots({
+                count: 1,
+                filename: `tn-${onlyName}.jpg`,
+                folder: 'public/images'
+            })
+
+        try {
+            await Product.create({
+                productName: name,
+                productDescription: description,
+                userId,
+                image,
+                thumbnail:`tn-${onlyName}.jpg`
+            })
+
+            successHandler(response, { message: "product created" }, 201)
+        } catch (error) {
+            errorHandler(response, error, 401)
+        }
     }
+    else {
+        try {
+            await Product.create({
+                productName: name,
+                productDescription: description,
+                userId,
+                image
+            })
+
+            successHandler(response, { message: "product created" }, 201)
+        } catch (error) {
+            errorHandler(response, error, 401)
+        }
+    }
+
 
 }
 
 const getAllProducts = async (request: Request, response: Response) => {
     try {
         const value = request.query.value
-        const id:any = request.query.userId
+        const id: any = request.query.userId
         const userId = new mongoose.Types.ObjectId(id)
         const searchData = request.query.value
-      ? {
-        $match: {
-            productName: { $regex: value, $options: 'i' } 
-        },
-      }
-      : { $match: {} };
+            ? {
+                $match: {
+                    productName: { $regex: value, $options: 'i' }
+                },
+            }
+            : { $match: {} };
         const products = await Product.aggregate([
-            { $match: {
-                userId
-            } },
+            {
+                $match: {
+                    userId
+                }
+            },
             searchData
         ])
 
@@ -457,10 +500,10 @@ const updateProduct = async (request: Request, response: Response) => {
 }
 
 const deleteProduct = async (request: Request, response: Response) => {
-    
+
     try {
         const product = await Product.findById(request.query.id)
-    
+
         if (product?.image) {
             const imageData = product.image;
             fs.unlink(`public/images/${imageData}`, (e) => {
@@ -471,12 +514,12 @@ const deleteProduct = async (request: Request, response: Response) => {
                 }
             });
         }
-    
+
         await Product.findByIdAndDelete(request.query.id)
 
-        successHandler(response,{message:"product deleted"},200)
+        successHandler(response, { message: "product deleted" }, 200)
     } catch (error) {
-        errorHandler(response,error,400)
+        errorHandler(response, error, 400)
     }
 }
 
