@@ -25,9 +25,9 @@ function SideBar() {
             <Link to={"/home/product"} className='bg-white h-10 mx-2 my-1 rounded-lg flex items-center justify-start cursor-pointer'>
                 <h2 className='text-lg ms-2 text-slate-400'>Add Product</h2>
             </Link>
-            <div className='bg-white h-10 mx-2 my-1 rounded-lg flex items-center justify-start'>
-                <h2 className='text-lg ms-2 text-slate-400'>Cart</h2>
-            </div>
+            <Link to={"/home/all-products-data"} className='bg-white h-10 mx-2 my-1 rounded-lg flex items-center justify-start'>
+                <h2 className='text-lg ms-2 text-slate-400'>All-product-Details</h2>
+            </Link>
             <Link to={"/home/all-products"} className='bg-white h-10 mx-2 my-1 rounded-lg flex items-center justify-start cursor-pointer'>
                 <h2 className='text-lg ms-2 text-slate-400'>All Products</h2>
             </Link>

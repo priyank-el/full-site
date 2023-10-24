@@ -9,13 +9,13 @@ import UpdatePassword from "../pages/dropdownMenu/UpdatePassword"
 import UpdateProfile from "../pages/dropdownMenu/UpdateProfile"
 import ViewProfile from "../pages/dropdownMenu/Viewprofile"
 import LogoutPage from "../pages/dropdownMenu/logoutPage"
+import AllproductsDetails from "../pages/product/AllProductDetails"
 import ViewproductData from "../pages/product/ViewproductData"
 import AddProduct from "../pages/product/addProduct"
 import Allproducts from "../pages/product/allProducts"
 import UpdateProduct from "../pages/product/updateProduct"
 
 const routes = [
-
     {
         path: '/',
         component: Signup,
@@ -99,6 +99,12 @@ const routes = [
         path: '/home/all-products',
         component: Allproducts,
         name: "all-products",
+        auth:true
+      },
+      {
+        path: '/home/all-products-data',
+        component: AllproductsDetails,
+        name: "all-products-data",
         auth:true
       },
       {

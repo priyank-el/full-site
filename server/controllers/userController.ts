@@ -404,7 +404,7 @@ const addProductData = async (request: Request, response: Response) => {
                 productDescription: description,
                 userId,
                 image,
-                thumbnail:`tn-${onlyName}.jpg`
+                thumbnail: `tn-${onlyName}.jpg`
             })
 
             successHandler(response, { message: "product created" }, 201)
@@ -451,6 +451,32 @@ const getAllProducts = async (request: Request, response: Response) => {
             searchData
         ])
 
+        successHandler(response, products, 200)
+    } catch (error) {
+        errorHandler(response, error, 401)
+    }
+}
+
+const AllProducts = async (request: Request, response: Response) => {
+    const value = request.query.value
+    const _page:any = request.query._page
+    const _limit:any = request.query._limit
+    const dataLimit = parseInt(_limit)
+    const dataSkip = (_page - 1) * dataLimit
+    const searchData = request.query.value
+        ? {
+            $match: {
+                productName: { $regex: value, $options: 'i' }
+            },
+        }
+        : { $match: {} }
+
+    try {
+        const products = await Product.aggregate([
+            searchData
+        ])
+        .skip(dataSkip)
+        .limit(dataLimit)
         successHandler(response, products, 200)
     } catch (error) {
         errorHandler(response, error, 401)
@@ -543,5 +569,6 @@ export {
     getAllProducts,
     productById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    AllProducts
 }
