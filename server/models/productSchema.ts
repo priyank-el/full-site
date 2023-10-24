@@ -15,6 +15,9 @@ const productSchema = new mongoose.Schema({
     userId:{
         type:mongoose.Types.ObjectId,
         ref:'User'
+    },
+    thumbnail:{
+        type:String
     }
 })
 
