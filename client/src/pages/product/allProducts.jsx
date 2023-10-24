@@ -16,6 +16,13 @@ function Allproducts() {
     const [Id, setId] = useState('')
     const { loginUser } = useContext(UserName)
 
+    // const isImage = ['.gif','.jpg','.jpeg','.png']; //you can add more
+    // const   isVideo =['.mpg', '.mp2', '.mpeg', '.mpe', '.mpv', '.mp4'] // you can add more extention  
+
+    function checkURL(url) {
+        return(url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+    }
+
     useEffect(() => {
         const fetchAllProducts = async () => {
             try {
@@ -84,10 +91,15 @@ function Allproducts() {
             key: 'description',
         },
         {
-            title: 'Description',
+            title: 'Image/Video',
             dataIndex: 'image',
             key: 'image',
-            render: (text) => <img src={`http://localhost:3000/images/${text}`} className="h-14 w-14 rounded-lg" ></img>
+            render: (text) => 
+            checkURL(text) 
+            ?
+            <img src={`http://localhost:3000/images/${text}`} className="h-14 w-14 rounded-lg" ></img>
+            :
+            <video src={`http://localhost:3000/images/${text}`} autoPlay className="h-14 w-14 rounded-lg"></video>
         },
         {
             title: 'Action',
