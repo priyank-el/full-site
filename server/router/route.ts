@@ -3,7 +3,7 @@ import { loginUserValidator, registerUserValidator, updaterUserValidator } from 
 import multer from 'multer'
 import { jwtAuth } from '../middleware/jwtAuth';
 import nonemptyValidator from '../validators/nonEmptyValidator';
-import { addState,getAllStates,addCity,getAllCities,resendOtp,updateProduct,deleteProduct,addProductData, getAllProducts,signInUser, productById,signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword,addCountry,getAllCountry } from '../controllers/userController';
+import { addState,getAllStates,addCity,getAllCities,resendOtp,updateProduct,deleteProduct,AllProducts,addProductData, getAllProducts,signInUser, productById,signupUser, updatePassword, updateUserProfile, userProfile, verifyOtp,forgotUserPassword,createNewPassword,addCountry,getAllCountry } from '../controllers/userController';
 import fs from 'fs';
 import User from '../models/userSchema';
 import { errorHandler, successHandler } from '../handler/responseHandler';
@@ -90,8 +90,11 @@ router.put('/update-product',upload.single('image'),updateProduct)
 //  DELETE PRODUCT :
 router.delete('/delete-product',deleteProduct)
 
-// GET ALL PRODUCTS :
+// GET ALL PRODUCTS BY USER ID:
 router.get('/all-products',jwtAuth,getAllProducts)
+
+// GET ALL USERS PRODUCTS :
+router.get('/products',jwtAuth,AllProducts)
 
 // UPDATE PASSWORD :
 router.post("/update-loginuser-password", jwtAuth, updatePassword)
