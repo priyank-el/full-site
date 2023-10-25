@@ -3,7 +3,7 @@ import DropdownMenu from "../components/DropdownMenu"
 function Header() {
 
     return (
-        <div className='grid grid-cols-6 gap-2 px-2 py-1 shadow-gray-600 sticky top-0'>
+        <div className='grid grid-cols-6 gap-2 px-2 mb-1 shadow-gray-600 sticky top-0'>
             <div className='bg-slate-500 h-16 items-center text-center rounded-md col-start-1 col-span-6  grid grid-cols-12 gap-2 px-2 py-1 shadow-gray-600'>
                 <div className='h-3/4 text-center rounded-md col-start-1 flex items-center text-gray-400 text-2xl font-extrabold col-span-3'>
                     <h1>

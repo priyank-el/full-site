@@ -12,8 +12,7 @@ export default function AuthVerify() {
                 <div className="col-start-1 h-screen fixed rounded-md bg-slate-500">
                     <SideBar />
                 </div>
-                <div className="col-start-2 col-span-5 m-3 overflow-hidden">
-
+                <div className="col-start-2 col-span-5 m-3">
                     <Outlet />
                 </div>
             </div>
