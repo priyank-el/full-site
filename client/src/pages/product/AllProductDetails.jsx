@@ -1,44 +1,47 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Table } from "antd"
-import InfiniteScroll from 'react-infinite-scroller'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { Input } from "antd"
+
 
 function AllproductsDetails() {
 
     const navigate = useNavigate()
+
     const [products, setProducts] = useState([])
-    const [loading, setLoading] = useState(true)
-    // const [value, setValue] = useState('')
-    // const [Id, setId] = useState('')
-    // const { loginUser } = useContext(UserName)
+    const [hasMore,setHasMore] = useState(true)
+    const [page, setPage] = useState(2)
+    const [value, setValue] = useState('');
 
     // const isImage = ['.gif','.jpg','.jpeg','.png']; //you can add more
     // const   isVideo =['.mpg', '.mp2', '.mpeg', '.mpe', '.mpv', '.mp4'] // you can add more extention  
 
-    const [value, setValue] = useState('');
-    const [page, setPage] = useState(1);
 
     function checkURL(url) {
         return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
     }
-    useEffect(() => {
-        fetchAllProducts()
-    }, [page])
+
+    const handletextChange = (e) => {
+
+        const data = e.target.value;
+
+        setValue(data)
+    }
 
     const fetchAllProducts = async () => {
         try {
             debugger
-            const { data } = await axios.get(`http://localhost:3000/products?value=${value}&_page=${page}&_limit=5`, {
+            const { data } = await axios.get(`http://localhost:3000/products?value=${value}&_page=1&_limit=6`, {
                 headers: {
                     Authorization: localStorage.getItem("JwtToken")
                 }
             })
-            if (data.length !== 0) {
+           
                 setProducts(data)
-                setPage(page + 1)
                 setLoading(false)
-            }
+                setHasMore(true)
+            
         } catch (error) {
             console.log(error)
             if (error.response.data.error.message) {
@@ -46,102 +49,63 @@ function AllproductsDetails() {
             }
         }
     }
-    
-    // const handletextChange = (e) => {
 
-    //     const data = e.target.value;
+    const fetchMoreData = async () => {
+        const { data } = await axios.get(`http://localhost:3000/products?value=${value}&_page=${page}&_limit=6`, {
+                headers: {
+                    Authorization: localStorage.getItem("JwtToken")
+                }
+            })
+            data.length > 0 
+            ? setHasMore(true)
+            : setHasMore(false)
 
-    //     setValue(data)
-    // }
-
-    // const deleteData = async () => {
-    //     try {
-    //         debugger
-    //         const { data } = await axios.delete(`http://localhost:3000/delete-product?id=${Id}`)
-
-    //         if (data.message) {
-    //             toast.success("product deleted")
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-    // const isOk = () => {
-    //     setIsModalOpen(false)
-    //     deleteData()
-    //     setLoading(true)
-    // }
-
-    if (loading) {
-        return (
-            <h1 className="text-center">Loading...</h1>
-        )
+                setProducts((prev) => [...prev,...data])
+                setPage((prev)=>prev + 1)
+            
     }
 
-    const columns = [
-        {
-            title: 'Product Name',
-            dataIndex: 'productName',
-            key: 'name'
-        },
-        {
-            title: 'Description',
-            dataIndex: 'productDescription',
-            key: 'description',
-        },
-        {
-            title: 'Image/Video',
-            dataIndex: 'image',
-            key: 'image',
-            render: (text) =>
-                checkURL(text)
-                    ?
-                    <img src={`http://localhost:3000/images/${text}`} className="h-14 w-14 rounded-lg" ></img>
-                    :
-                    <video src={`http://localhost:3000/images/${text}`} className="h-14 w-14 rounded-lg"></video>
-        }
-    ]
-
-    const datasource = products.map((product, index) => {
-        if (product.thumbnail) {
-            product.image = product.thumbnail
-        }
-        return {
-            ...product,
-            key: index + 1
-        }
-    })
+    useEffect(() => {
+        fetchAllProducts()
+    }, [value])
 
     return (
-        <>
-            {/* {datasource.length > 0
-                ? <h1 className="text-center text-4xl font-extrabold mb-5">
-                    All Users products
-                </h1>
-                : <h1 className="text-center font-extrabold text-3xl">No products found</h1>
-            }
-
-            <div className="w-80">
-                Search :<Input className="me-96" onChange={handletextChange} />
-            </div> */}
+        <>      
+             <div className="w-80">
+                Search :<Input className="me-96 bg-transparent border border-slate-500 focus:border focus:border-slate-500 hover:border hover:border-slate-500" onChange={handletextChange}/>
+            </div>
+            <div>
             <InfiniteScroll
-                style={{ margin: "10px" }}
-                pageStart={0}
-                loadMore={()=>fetchAllProducts}
-                hasMore={true}
-                loader={
-                    <div className="loader" key={0}>
-                        Loading ...
-                    </div>
-                }
-            >
-                <Table
-                dataSource={datasource}
-                columns={columns}
-                pagination={false}
-            />
-            </InfiniteScroll>
+                    dataLength={products.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore} // Replace with a condition based on your data source
+                    loader={<p className="text-center text-2xl ">Loading...</p>}
+                >
+            <div id="main-div" className="grid grid-cols-3 gap-10">
+                    {
+                        products.length !== 0 && products.map(product => (
+
+                            <div id="card-content">
+                                <div className="border border-gray-300 shadow shadow-gray-400 rounded-xl m-2" key={product._id}>
+                                    {
+                                        checkURL(product.image)
+                                        ?
+                                        <img src={`http://localhost:3000/images/${product.image}`} className="h-52 w-full m-auto rounded-md" alt="product come here" />
+                                        :
+                                        <img className="h-52 w-full m-auto rounded-md" alt="product come here" src={`http://localhost:3000/images/${product.thumbnail}` }></img>
+                                    }
+                                    <p className="text-center mt-2 text-2xl font-extrabold">{product.productName}</p>
+                                    <p className="text-center mt-2">{product.productDescription}</p>
+                                </div>
+
+                            </div>
+                        ))
+                    }
+            </div>
+                </InfiniteScroll>
+            </div>
+                
+
         </>
 
     )
